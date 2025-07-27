@@ -27,3 +27,6 @@ go.work.sum
 # OS generated files
 .DS_Store
 Thumbs.db
+
+PRD.md
+*PLAN.md
