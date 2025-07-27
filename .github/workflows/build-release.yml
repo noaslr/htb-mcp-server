@@ -4,6 +4,22 @@ on:
   push:
     tags:
       - "*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for the release (e.g., v1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+      draft:
+        description: 'Create as draft release'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -38,12 +54,21 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v4
 
+    - name: Set version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.tag_name }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+        fi
+
     - name: Create release directory
       run: mkdir -p release
 
     - name: Build binary
       run: |
-        GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -v -ldflags "-s -w -X main.version=${{ github.ref_name }}" -o release/htb-mcp-server-${{ matrix.name }}${{ matrix.ext }}
+        GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -v -ldflags "-s -w -X main.version=${{ steps.version.outputs.version }}" -o release/htb-mcp-server-${{ matrix.name }}${{ matrix.ext }}
 
     - name: Upload binaries
       uses: actions/upload-artifact@v4
