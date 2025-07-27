@@ -285,7 +285,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Issues**: [GitHub Issues](https://github.com/NoASLR/htb-mcp-server/issues)
 - **Documentation**: [Wiki](https://github.com/NoASLR/htb-mcp-server/wiki)
-- **Community**: [Discussions](https://github.com/NoASLR/htb-mcp-server/discussions)
 
 ---
 
